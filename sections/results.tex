@@ -1,0 +1,35 @@
+\section{Results}
+The three models (subLSTM, fix-subLSTM and LSTM) were compared empirically on two tasks (MNIST \cite{lecun-mnisthandwrittendigit-2010} and world-level language modelling \cite{marcus_1993, DBLP:journals/corr/MerityXBS16}). The network weights were initialised with Glorot initialisation \cite{Glorot10understandingthe} and the LSTM units had an initial forget bias equal to 1. The number of parameters was held constant across models for better comparison.
+
+\subsection{Sequential MNIST}
+The "sequential" MNIST is a digit classification taks, where each digit image is decomposed from $28 \times 28$ pixels to 784 steps (\figurename{\ref{fig:mnist}a}). The networks were opitmised using RMSProp with momentum, a learning rate of $10^{-4}$, one hidden layer and 100 hidden units. The results show that subLSTMs achieve similar results to LSTMs (\figurename{\ref{fig:mnist}b}). The results were comparable to previous results using the same task \cite{DBLP:journals/corr/LeJH15}.
+\columnFigure{mnist}{A comparison of LSTM and subLSTM networks for sequential MNIST using 100 hidden units. \textbf{a.} Examples from the MNIST dataset. Each matrix was converted into a sequence of 784 elements. \textbf{b.} Classification accuracy on the test set.}
+
+\subsection{Language Modelling}
+Language modelling is more challenging task for RNNs as it requires both short and long-term dependencies. The task was to predict the following word at each timestep. For evaluation \textit{preplexity} was used which measures how well a probability model predicts a sample. Each model had 2 hidden layers and backpropagation was truncated to 35 steps with a batch size of 20. RMSProp with momentum was used. A hyperparameter search was performed using Google Vizier
+The test was performed on a number of hidden units: 10, 100, 200, 650. The number of parameters was kept constant across models. Training was done on Penn Treebank and Wikitext-2.
+\begin{table}[h!]
+\caption{Penn Treebank (PTB) Test Perplexity}\label{tab:penn}
+\centering
+\begin{tabular}{llll}
+\hline
+size & subLSTM & fix-subLSTM & LSTM   \\ \hline
+10   & 222.80  & \textbf{213.86}      & 215.93 \\
+100  & 91.46   & 91.84       & \textbf{88.39}  \\
+200  & 79.59   & 81.97       & \textbf{74.60}  \\
+650  & 76.17   & 70.58       & \textbf{64.34}  \\ \hline
+\end{tabular}
+\end{table}
+\begin{table}[h!]
+\caption{Wikitext-2 Test Perplexity}\label{tab:wiki}
+\centering
+\begin{tabular}{llll}
+\hline
+size & subLSTM & fix-subLSTM & LSTM   \\ \hline
+10   & 268.33  & \textbf{259.89}      & 271.44 \\
+100  & 103.36   & 105.06       & \textbf{102.77}  \\
+200  & 89.00   & 94.33       & \textbf{86.15}  \\
+650  & 78.92   & 79.49       & \textbf{74.27}  \\ \hline
+\end{tabular}
+\end{table}
+Tables \ref{tab:penn} and \ref{tab:wiki} show that on both datasets the models perfomed similarily, with the fix-subLSTM sometimes performing better than the subLSTM.

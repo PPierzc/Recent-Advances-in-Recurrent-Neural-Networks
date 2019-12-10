@@ -1,0 +1,61 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+\graphicspath{{./images/}}
+
+\newcommand{\columnFigure}[2]{
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width = 7.5cm]{#1}
+        \caption{#2}
+        \label{fig:#1}
+    \end{figure}
+}
+
+\newcommand{\fullWidthFigure}[2]{
+    \begin{figure*}[!h]
+        \centering
+        \includegraphics[width = 16cm]{#1}
+        \caption{#2}
+        \label{fig:#1}
+    \end{figure*}
+}
+
+\begin{document}
+
+\title{
+    {\large Recent Advances in Recurrent Neural Networks -- Winter Semester 2019/2020}\\
+    Cortical microcircuits\\as gated-recurrent neural networks
+}
+
+\author{
+    \IEEEauthorblockN{Paweł A. Pierzchlewicz}
+    \IEEEauthorblockA{Graduate Training Center for Neuroscience\\University of Tübingen, Tübingen, DE}
+}
+
+\maketitle
+
+\input{sections/abstract.tex}
+
+\begin{IEEEkeywords}
+Cortical Microcircuits, Recurrent Neural Networks, Computational Neuroscience
+\end{IEEEkeywords}
+
+\input{sections/introduction.tex}
+\input{sections/biological_inspiration.tex}
+\input{sections/methods.tex}
+\input{sections/results.tex}
+\input{sections/conclusion.tex}
+\input{sections/discussion.tex}
+
+%
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+
+\end{document}

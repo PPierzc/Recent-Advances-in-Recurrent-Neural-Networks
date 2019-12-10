@@ -1,0 +1,30 @@
+\section{Methods}
+The biological inspiration gives foundations for proposing a new architecture, which uses subtractive gating rather than multiplicative. The LSTM implementation using subtractive gating rather than multiplicative is called \textbf{subLSTM}. The architecture and the comparisons have been displayed on \figurename{\ref{fig:subLSTM}}.
+
+\columnFigure{subLSTM}{\textbf{a.} Example unit of a simplified cortical recurrent neural network. Sensory input projects to pyramidal cells (PC) in layer-2/3, which then propagates to the memory cell. The memory decays with a decay time constant $f$. The input onto layer-5 is balanced out by inhibitory basket cells (BC). The balance is represented by the diagonal 'equal' connection. The graph below shows the gating states for an implementation using a simple leaky-integrate-and-fire model capped to 200 Hz with subtractive inhibition. \textbf{b.} The implementation of the cortical model following the similar notation to LSTM units, but with $\textbf{i}_t$ and $\textbf{o}_t$ being subtractive input and output gates. Dashed connections represent the potential to have a balance between excitatory and inhibitory input. The graph below shows sigmoidal activation functions with subtractive gating. \textbf{c.} An LSTM recurrent neural network cell. The graph below shows the sigmoidal activation functions using multiplicative gating. The bottom graphs represent the frequency of spikes in Hz as in biological circuits.}
+
+A LSTM unit consists of a memory cell $\textbf{c}_t$, input $\textbf{i}_t$, forget $\textbf{f}_t$ and output $\textbf{o}_t$ gates. The state of the LSTM is defined as $\textbf{h}_t = f(\textbf{x}_t, \textbf{h}_{t-1}, \textbf{i}_t, \textbf{f}_t, \textbf{o}_t)$, where $\textbf{x}_t$ is the input vector. The dynamics of the unit are given below.
+\begin{table}[h!]
+\centering
+\def\arraystretch{1.5}
+\begin{tabular}{c|c|c}
+        & \textbf{LSTM}               & \textbf{subLSTM}             \\
+$[\textbf{f}_t, \textbf{o}_t, \textbf{i}_t]^T$ = & $\sigma(W\textbf{x}_t + R\textbf{h}_{t-1} + \textbf{b}$ & $\sigma(W\textbf{x}_t + R\textbf{h}_{t-1} + \textbf{b}$\\
+$\textbf{z}_t$ = & $\tanh(W\textbf{x}_t + R\textbf{h}_{t-1} + \textbf{b}$ & $\sigma(W\textbf{x}_t + R\textbf{h}_{t-1} + \textbf{b}$\\
+$\textbf{c}_t$ = & $\textbf{c}_{t-1} \odot \textbf{f}_t + \textbf{z}_t \odot i_t$ & $\textbf{c}_{t-1} \odot \textbf{f}_t + \textbf{z}_i - \textbf{i}_t$  \\
+$\textbf{h}_t$ = & $\tanh(\textbf{c}_t) \odot \textbf{o}_t$             & $\sigma(\textbf{c}_t) - \textbf{o}_t$          
+\end{tabular}
+\end{table}
+Here, $\odot$ denotes element-wise multiplication, $W$, $R$ and $\textbf{b}$ are the parameters of the models and $\sigma(\cdot)$ is the sigmoid function. The major difference occurs in $\textbf{c}_t$ and $\textbf{h}_t$, where the multiplication is changed to subtraction.
+
+
+\subsection{Gating Solutions}
+Canonical LSTM models contain an input gate \textit{i}, an output gate \textit{o} and a forget gate \textit{f}. Input gate and output gate have been discussed previously and stated that the subtractive inhibitory connections exhibit gating characteristics. The forget gate has two possible implementations:
+\begin{enumerate}
+    \item using a forget fate similar to LSTMs.
+    \item using a learned simple decay, which is more biologically plausible.
+\end{enumerate}
+The latter method called \textbf{fix-subLSTM} was also examined.
+
+\subsection{Gradient comparison}
+The authors of the paper have performed a gradient comparison and found that subLSTMs don't directly impair the error propagation. Ergo subtractive gating has the potential to improve gradient flow towards the input layers.
